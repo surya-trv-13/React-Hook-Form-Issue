@@ -23,10 +23,11 @@ const CreateForm = ({ activeStep, updateStep, previousStep }) => {
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
         {data &&
-          data[activeStep].map((formField) => {
+          data[activeStep].map((formField, index) => {
             if (formField.type === "TextField") {
               return (
                 <Controller
+                  key={index}
                   control={control}
                   name={formField.name}
                   render={({ field: { ref, ...inputProps } }) => (
@@ -53,6 +54,8 @@ const CreateForm = ({ activeStep, updateStep, previousStep }) => {
                   )}
                 />
               );
+            } else {
+              return null;
             }
           })}
         <div>
