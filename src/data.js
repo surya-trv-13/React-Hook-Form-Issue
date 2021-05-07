@@ -14,6 +14,11 @@ export const data = [
       label: "AGE",
       name: "insert_age",
       type: "TextField"
+    },
+    {
+      label: "IMAGE",
+      name: "insert_image",
+      type: "File"
     }
   ],
   [
