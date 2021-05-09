@@ -19,6 +19,15 @@ export const data = [
       label: "IMAGE",
       name: "insert_image",
       type: "File"
+    },
+    {
+      label: "CheckBoxtype",
+      name: "SelectOne",
+      type: "checkbox",
+      content: [
+        { name: "Surya", optionValue: "Surya" },
+        { name: "Ipsita", optionValue: "Ipsita" }
+      ]
     }
   ],
   [

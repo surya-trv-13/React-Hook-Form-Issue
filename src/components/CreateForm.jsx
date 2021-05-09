@@ -2,7 +2,15 @@ import React, { useRef } from "react";
 import { connect } from "react-redux";
 import { useForm, Controller } from "react-hook-form";
 import { data } from "../data.js";
-import { TextField, FormControl, Button } from "@material-ui/core";
+import {
+  TextField,
+  FormControl,
+  Button,
+  FormLabel,
+  FormGroup,
+  FormControlLabel,
+  Checkbox
+} from "@material-ui/core";
 import { updateStep, previousStep } from "../actions/stepAction";
 import { setValue } from "../actions/setValue";
 const CreateForm = ({
@@ -12,6 +20,7 @@ const CreateForm = ({
   setFormValue,
   enteredData
 }) => {
+  const defaultIds = [];
   const {
     control,
     handleSubmit,
@@ -22,6 +31,7 @@ const CreateForm = ({
   } = useForm({
     mode: "all",
     shouldUnregister: true
+    // defaultValues: { item_ids: [{ Surya: true }] }
   });
 
   const onSubmit = (data) => {
@@ -46,6 +56,16 @@ const CreateForm = ({
 
   const onAttachClick = () => {
     handleFileClick.current.click();
+  };
+
+  const handleCheck = (checkedId) => {
+    const { item_ids: ids } = getValues();
+    console.log("GET VALUE", getValues());
+    const newIds = ids?.includes(checkedId)
+      ? ids?.filter((id) => id !== checkedId)
+      : [...(ids ?? []), checkedId];
+    console.log("GET VALUE", newIds);
+    return newIds;
   };
 
   const handleFile = (e, name) => {
@@ -139,6 +159,63 @@ const CreateForm = ({
                     </FormControl>
                   )}
                 />
+              );
+            } else if (formField.type === "checkbox") {
+              return (
+                <FormControl error={!!errors.item_ids?.message}>
+                  <Controller
+                    name="item_ids"
+                    render={({ field }) => {
+                      // console.log("Item", field.value[0]?.["Surya"]);
+                      return formField.content.map((item, index) => (
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              onChange={() =>
+                                field.onChange(handleCheck(item.name))
+                              }
+                              defaultChecked={enteredData.item_ids?.includes(
+                                item.name
+                              )}
+                              // defaultChecked={defaultIds.includes(item.name)}
+                            />
+                          }
+                          key={index}
+                          label={item.name}
+                        />
+                      ));
+                    }}
+                    control={control}
+                  />
+                </FormControl>
+                // // <FormControl component="fieldset">
+                // //   <FormLabel component="legend">
+                // //     Assign responsibility
+                // //   </FormLabel>
+                // //   <FormGroup>
+                // <>
+                //   {formField.content.map((con, keyName) => (
+                //     <Controller
+                //       key={keyName}
+                //       control={control}
+                //       name={con.name}
+                //       valueName="checked"
+                //       type="checkbox"
+                //       render={(field) => (
+                //         <FormControlLabel
+                //           {...field}
+                //           control={<Checkbox value={con.name} />}
+                //           label={con.optionValue}
+                //           onChange={(e) =>
+                //             console.log("VALUE::: ", e.target.value)
+                //           }
+                //         />
+                //       )}
+                //     />
+                //   ))}
+                // </>
+                // //   </FormGroup>
+                // // </FormControl>
               );
             } else {
               return null;
