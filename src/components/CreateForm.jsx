@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useState, useRef } from "react";
 import { connect } from "react-redux";
 import { useForm, Controller } from "react-hook-form";
 import { data } from "../data.js";
@@ -22,6 +22,7 @@ const CreateForm = ({
 }) => {
   const defaultIds = [];
   const {
+    register,
     control,
     handleSubmit,
     formState: { errors },
@@ -41,7 +42,7 @@ const CreateForm = ({
   };
 
   const handleFileClick = useRef(null);
-
+  const [file, setFile] = useState(null);
   const handlePreviousStep = () => {
     previousStep();
     reset(enteredData);
@@ -50,7 +51,8 @@ const CreateForm = ({
   const handleFileInput = (event, name) => {
     console.log("Called File", event?.target?.files[0]);
     if (event.target.files) {
-      setValue(name, event.target.files[0]);
+      setValue(name, event.target.files);
+      setFile(event.target.files[0]?.name);
     }
   };
 
@@ -120,45 +122,59 @@ const CreateForm = ({
                 />
               );
             } else if (formField.type === "File") {
+              console.log(
+                "Data File:: ",
+                getValues()?.[formField.name]?.[0]?.name
+              );
+              const { ref, ...rest } = register(formField.name, {
+                required: "Please Fill the Values"
+              });
               return (
-                <Controller
-                  key={index + formField.name}
-                  control={control}
-                  name={formField.name}
-                  render={({ field: { ref, ...inputProps } }) => (
-                    <FormControl variant="outlined">
-                      <TextField
-                        {...inputProps}
-                        onChange={(e) => handleFileInput(e, formField.name)}
-                        variant="outlined"
-                        label={formField.label}
-                        required={formField?.isMandatory}
-                        InputLabelProps={{
-                          shrink: true
-                        }}
-                        value={getValues()?.[formField.name]?.name}
-                        inputRef={ref}
-                        error={errors?.[formField.name]}
-                        helperText={
-                          errors?.[formField.name] &&
-                          errors?.[formField.name].message
-                        }
-                        InputProps={{
-                          autoComplete: "off",
-                          readOnly: true
-                        }}
-                      />
-                      <Button variant="contained" component="label">
-                        Upload File
-                        <input
-                          type="file"
-                          hidden
-                          onChange={(e) => handleFileInput(e, formField.name)}
-                        />
-                      </Button>
-                    </FormControl>
-                  )}
-                />
+                <>
+                  <input
+                    ref={(e) => {
+                      ref(e);
+                      handleFileClick.current = e;
+                    }}
+                    {...rest}
+                    type="file"
+                    hidden
+                    name={formField.name}
+                    onChange={(e) => {
+                      rest.onChange(e);
+                      handleFileInput(e, formField.name);
+                    }}
+                  />
+
+                  <FormControl variant="outlined">
+                    <TextField
+                      onChange={(e) => handleFileInput(e, formField.name)}
+                      variant="outlined"
+                      label={formField.label}
+                      required={formField?.isMandatory}
+                      InputLabelProps={{
+                        shrink: true
+                      }}
+                      value={file}
+                      error={errors?.[formField.name]}
+                      helperText={
+                        errors?.[formField.name] &&
+                        errors?.[formField.name].message
+                      }
+                      InputProps={{
+                        autoComplete: "off",
+                        readOnly: true
+                      }}
+                    />
+                    <Button
+                      variant="contained"
+                      onClick={onAttachClick}
+                      component="label"
+                    >
+                      Upload File
+                    </Button>
+                  </FormControl>
+                </>
               );
             } else if (formField.type === "checkbox") {
               return (
