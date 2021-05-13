@@ -70,17 +70,21 @@ const CreateForm = ({
     return newIds;
   };
 
-  const handleFile = (e, name) => {
-    e.preventDefault();
-
+  const handleFile = (name, ref, rest) => {
     return (
       <input
-        type="type"
-        ref={handleFileClick}
-        onClick={(event) => {
-          event.target.value = null;
+        ref={(e) => {
+          ref(e);
+          handleFileClick.current = e;
         }}
-        onChange={(event) => handleFileInput(event, name)}
+        {...rest}
+        type="file"
+        hidden
+        name={name}
+        onChange={(e) => {
+          rest.onChange(e);
+          handleFileInput(e, name);
+        }}
       />
     );
   };
@@ -131,20 +135,7 @@ const CreateForm = ({
               });
               return (
                 <>
-                  <input
-                    ref={(e) => {
-                      ref(e);
-                      handleFileClick.current = e;
-                    }}
-                    {...rest}
-                    type="file"
-                    hidden
-                    name={formField.name}
-                    onChange={(e) => {
-                      rest.onChange(e);
-                      handleFileInput(e, formField.name);
-                    }}
-                  />
+                  {handleFile(formField.name, ref, rest)}
 
                   <FormControl variant="outlined">
                     <TextField
