@@ -21,6 +21,15 @@ export const data = [
       type: "File"
     },
     {
+      label: "MultiSelectBox",
+      name: "select_multiple",
+      content: [
+        { optionName: "Surya", optionValue: "Surya" },
+        { optionName: "Ipsita", optionValue: "Ipsita" }
+      ],
+      type: "MultiSelectBox"
+    },
+    {
       label: "CheckBoxtype",
       name: "SelectOne",
       type: "checkbox",

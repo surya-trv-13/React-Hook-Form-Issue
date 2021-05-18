@@ -8,6 +8,7 @@ import {
   Button,
   FormLabel,
   FormGroup,
+  MenuItem,
   FormControlLabel,
   Checkbox
 } from "@material-ui/core";
@@ -87,6 +88,22 @@ const CreateForm = ({
         }}
       />
     );
+  };
+
+  const [formState, setFormState] = React.useState({
+    userRoles: []
+  });
+
+  const handleFieldChange = (event) => {
+    console.log(event);
+    event.persist();
+    setFormState((formState) => ({
+      ...formState,
+      [event.target.name]:
+        event.target.type === "checkbox"
+          ? event.target.checked
+          : event.target.value
+    }));
   };
 
   return (
@@ -195,34 +212,37 @@ const CreateForm = ({
                     control={control}
                   />
                 </FormControl>
-                // // <FormControl component="fieldset">
-                // //   <FormLabel component="legend">
-                // //     Assign responsibility
-                // //   </FormLabel>
-                // //   <FormGroup>
-                // <>
-                //   {formField.content.map((con, keyName) => (
-                //     <Controller
-                //       key={keyName}
-                //       control={control}
-                //       name={con.name}
-                //       valueName="checked"
-                //       type="checkbox"
-                //       render={(field) => (
-                //         <FormControlLabel
-                //           {...field}
-                //           control={<Checkbox value={con.name} />}
-                //           label={con.optionValue}
-                //           onChange={(e) =>
-                //             console.log("VALUE::: ", e.target.value)
-                //           }
-                //         />
-                //       )}
-                //     />
-                //   ))}
-                // </>
-                // //   </FormGroup>
-                // // </FormControl>
+              );
+            } else if (formField.type === "MultiSelectBox") {
+              return (
+                <Controller
+                  control={control}
+                  name={formField.name}
+                  render={({ field }) => {
+                    return (
+                      <TextField
+                        select
+                        name="userRoles"
+                        id="userRoles"
+                        variant="outlined"
+                        label="userRoles"
+                        SelectProps={{
+                          multiple: true,
+                          value: formState.userRoles,
+                          onChange: handleFieldChange
+                        }}
+                      >
+                        {formField.content.map((value) => {
+                          return (
+                            <MenuItem value={value.optionValue}>
+                              {value.optionName}
+                            </MenuItem>
+                          );
+                        })}
+                      </TextField>
+                    );
+                  }}
+                />
               );
             } else {
               return null;
