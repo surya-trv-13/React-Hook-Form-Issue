@@ -147,9 +147,7 @@ const CreateForm = ({
                 "Data File:: ",
                 getValues()?.[formField.name]?.[0]?.name
               );
-              const { ref, ...rest } = register(formField.name, {
-                required: "Please Fill the Values"
-              });
+              const { ref, ...rest } = register(formField.name, {});
               return (
                 <>
                   {handleFile(formField.name, ref, rest)}
@@ -216,30 +214,38 @@ const CreateForm = ({
             } else if (formField.type === "MultiSelectBox") {
               return (
                 <Controller
+                  key={index + formField.name}
                   control={control}
                   name={formField.name}
                   render={({ field }) => {
                     return (
-                      <TextField
-                        select
-                        name="userRoles"
-                        id="userRoles"
-                        variant="outlined"
-                        label="userRoles"
-                        SelectProps={{
-                          multiple: true,
-                          value: formState.userRoles,
-                          onChange: handleFieldChange
-                        }}
-                      >
-                        {formField.content.map((value) => {
-                          return (
-                            <MenuItem value={value.optionValue}>
-                              {value.optionName}
-                            </MenuItem>
-                          );
-                        })}
-                      </TextField>
+                      <FormControl variant="outlined">
+                        <TextField
+                          {...field}
+                          select
+                          name="userRoles"
+                          id="userRoles"
+                          value={formState.userRoles}
+                          variant="outlined"
+                          label="userRoles"
+                          SelectProps={{
+                            multiple: true,
+                            onChange: (e) => {
+                              field.onChange(e);
+                              handleFieldChange(e);
+                            },
+                            value: formState.userRoles
+                          }}
+                        >
+                          {formField.content.map((value) => {
+                            return (
+                              <MenuItem value={value.optionValue}>
+                                {value.optionName}
+                              </MenuItem>
+                            );
+                          })}
+                        </TextField>
+                      </FormControl>
                     );
                   }}
                 />
