@@ -25,7 +25,7 @@ export const data = [
       name: "select_multiple",
       content: [
         { optionName: "Surya", optionValue: "Surya" },
-        { optionName: "Ipsita", optionValue: "Ipsita" }
+        { optionName: "Narayan", optionValue: "Narayan" }
       ],
       type: "MultiSelectBox"
     },
@@ -35,7 +35,7 @@ export const data = [
       type: "checkbox",
       content: [
         { name: "Surya", optionValue: "Surya" },
-        { name: "Ipsita", optionValue: "Ipsita" }
+        { name: "Narayan", optionValue: "Narayan" }
       ]
     }
   ],
