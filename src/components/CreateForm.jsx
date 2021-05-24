@@ -14,6 +14,8 @@ import {
 } from "@material-ui/core";
 import { updateStep, previousStep } from "../actions/stepAction";
 import { setValue } from "../actions/setValue";
+import GetValues from "./GetValues";
+
 const CreateForm = ({
   activeStep,
   updateStep,
@@ -108,6 +110,7 @@ const CreateForm = ({
 
   return (
     <div>
+      <GetValues formValues={getValues()} />
       <form onSubmit={handleSubmit(onSubmit)}>
         {console.log("Data:: ", getValues())}
         {data &&
