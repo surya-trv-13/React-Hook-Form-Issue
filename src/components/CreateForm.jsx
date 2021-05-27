@@ -131,6 +131,10 @@ const CreateForm = ({
                         InputLabelProps={{
                           shrink: true
                         }}
+                        onChange={(e) => {
+                          inputProps.onChange(e);
+                          console.log("FormField Value:", formField);
+                        }}
                         inputRef={ref}
                         error={errors?.[formField.name]}
                         helperText={
