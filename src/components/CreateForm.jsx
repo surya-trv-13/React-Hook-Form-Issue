@@ -10,7 +10,9 @@ import {
   FormGroup,
   MenuItem,
   FormControlLabel,
-  Checkbox
+  Checkbox,
+  RadioGroup,
+  Radio
 } from "@material-ui/core";
 import { updateStep, previousStep } from "../actions/stepAction";
 import { setValue } from "../actions/setValue";
@@ -46,6 +48,7 @@ const CreateForm = ({
 
   const handleFileClick = useRef(null);
   const [file, setFile] = useState(null);
+  // const [radioValue, setRadioValue] = useState();
   const handlePreviousStep = () => {
     previousStep();
     reset(enteredData);
@@ -256,6 +259,30 @@ const CreateForm = ({
                     );
                   }}
                 />
+              );
+            } else if (formField.type === "RadioGroup") {
+              return (
+                <FormControl variant="outlined">
+                  <Controller
+                    key={index + formField.name}
+                    control={control}
+                    name={formField.name}
+                    render={({ field }) => (
+                      <RadioGroup row {...field} defaultValue={"Yes"}>
+                        {formField.content &&
+                          formField?.content.length !== 0 &&
+                          formField?.content?.map((radioField) => (
+                            <FormControlLabel
+                              label={radioField.optionName}
+                              key={radioField?.optionKey}
+                              control={<Radio color="primary" />}
+                              value={radioField?.optionValue}
+                            />
+                          ))}
+                      </RadioGroup>
+                    )}
+                  />
+                </FormControl>
               );
             } else {
               return null;

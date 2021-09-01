@@ -37,6 +37,15 @@ export const data = [
         { name: "Surya", optionValue: "Surya" },
         { name: "Narayan", optionValue: "Narayan" }
       ]
+    },
+    {
+      label: "RadioGroup Value",
+      name: "RadioGroup",
+      type: "RadioGroup",
+      content: [
+        { optionKey: "01", optionName: "Yes", optionValue: "Yes" },
+        { optionKey: "02", optionName: "No", optionValue: "No" }
+      ]
     }
   ],
   [
